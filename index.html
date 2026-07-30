@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Automation for Air Conditioning & HVAC Companies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#06121e;
+    --ink-2:#0a1a2b;
+    --ice:#5eeaff;
+    --ice-dim:rgba(94,234,255,.14);
+    --frost:#eaf6fb;
+    --frost-dim:rgba(234,246,251,.62);
+    --line:rgba(94,234,255,.16);
+    --amber:#ffb347;
+    --display:'Archivo Black',sans-serif;
+    --body:'Archivo',sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--frost);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(94,234,255,.09), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(94,234,255,.06), transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+
+  /* ---------- top bar ---------- */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 0;border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--ice);text-transform:uppercase}
+  .logo b{color:var(--frost)}
+  nav a.cta-mini{
+    font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink);background:var(--ice);padding:10px 18px;text-decoration:none;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  nav a.cta-mini:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(94,234,255,.35)}
+
+  /* ---------- hero ---------- */
+  header{padding:92px 0 72px;position:relative}
+  .tag{
+    font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ice);display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;
+    animation:rise .7s ease both;
+  }
+  .tag::before{content:"";width:34px;height:1px;background:var(--ice)}
+  h1{
+    font-family:var(--display);
+    font-size:clamp(38px,6.4vw,76px);
+    line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;
+    animation:rise .7s .08s ease both;
+  }
+  h1 .hot{
+    color:transparent;-webkit-text-stroke:1.5px var(--amber);
+    display:inline-block;
+  }
+  h1 .cool{color:var(--ice)}
+  .sub{
+    max-width:560px;margin-top:26px;font-size:18px;color:var(--frost-dim);
+    animation:rise .7s .16s ease both;
+  }
+  .hero-cta{
+    margin-top:40px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+    animation:rise .7s .24s ease both;
+  }
+  .btn{
+    font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+    padding:18px 30px;text-decoration:none;display:inline-block;position:relative;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary{background:var(--ice);color:var(--ink)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(94,234,255,.4)}
+  .btn-ghost{color:var(--frost);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--ice);color:var(--ice)}
+  .hero-note{font-family:var(--mono);font-size:12px;color:var(--frost-dim)}
+
+  /* big background number */
+  .hero-mark{
+    position:absolute;right:-40px;top:30px;font-family:var(--display);
+    font-size:clamp(160px,26vw,340px);color:transparent;
+    -webkit-text-stroke:1px rgba(94,234,255,.10);line-height:1;user-select:none;pointer-events:none;
+  }
+
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+  /* ---------- ticker ---------- */
+  .ticker{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    overflow:hidden;white-space:nowrap;padding:14px 0;background:var(--ink-2);
+  }
+  .ticker-inner{display:inline-block;animation:scroll 28s linear infinite}
+  .ticker span{
+    font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--frost-dim);margin:0 34px;
+  }
+  .ticker span::before{content:"✳";color:var(--ice);margin-right:14px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ---------- sections ---------- */
+  section{padding:96px 0}
+  .kicker{
+    font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ice);margin-bottom:18px;display:block;
+  }
+  h2{
+    font-family:var(--display);font-size:clamp(28px,4vw,46px);
+    text-transform:uppercase;line-height:1.08;letter-spacing:-.01em;max-width:640px;
+  }
+  .section-lede{max-width:560px;color:var(--frost-dim);margin-top:18px;font-size:17px}
+
+  /* pain row */
+  .pain{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:56px;border:1px solid var(--line)}
+  .pain div{background:var(--ink);padding:34px 28px}
+  .pain b{font-family:var(--display);font-size:34px;color:var(--amber);display:block;margin-bottom:10px}
+  .pain p{font-size:14px;color:var(--frost-dim)}
+
+  /* achieve list */
+  .achieve{margin-top:56px;border-top:1px solid var(--line)}
+  .achieve-row{
+    display:grid;grid-template-columns:70px 1fr;gap:26px;align-items:baseline;
+    padding:26px 0;border-bottom:1px solid var(--line);transition:background .25s ease, padding-left .25s ease;
+  }
+  .achieve-row:hover{background:var(--ice-dim);padding-left:14px}
+  .achieve-row .num{font-family:var(--mono);font-size:13px;color:var(--ice)}
+  .achieve-row .txt{font-size:clamp(17px,2.2vw,22px);font-weight:600}
+
+  /* solutions grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px}
+  .card{
+    border:1px solid var(--line);padding:32px 28px;background:var(--ink-2);
+    position:relative;transition:transform .25s ease, border-color .25s ease;
+  }
+  .card:hover{transform:translateY(-6px);border-color:var(--ice)}
+  .card::before{
+    content:attr(data-i);position:absolute;top:18px;right:20px;
+    font-family:var(--mono);font-size:12px;color:rgba(94,234,255,.4);
+  }
+  .card .icon{
+    width:44px;height:44px;border:1px solid var(--ice);color:var(--ice);
+    display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:22px;
+  }
+  .card h3{font-family:var(--body);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px}
+  .card p{font-size:14.5px;color:var(--frost-dim)}
+  .card.wide{grid-column:span 3;display:grid;grid-template-columns:44px 1fr 2fr;gap:26px;align-items:center;background:linear-gradient(90deg,var(--ink-2),rgba(94,234,255,.05))}
+  .card.wide .icon{margin:0}
+  .card.wide h3{margin:0}
+
+  /* imagine */
+  .imagine{
+    background:var(--ice);color:var(--ink);padding:0;
+  }
+  .imagine .wrap{padding-top:96px;padding-bottom:96px}
+  .imagine .kicker{color:var(--ink);opacity:.65}
+  .imagine h2{color:var(--ink)}
+  .chat{
+    margin-top:52px;max-width:520px;display:flex;flex-direction:column;gap:14px;
+  }
+  .bubble{
+    padding:16px 20px;font-size:15px;max-width:85%;
+    font-family:var(--body);line-height:1.5;
+  }
+  .bubble.them{background:var(--ink);color:var(--frost);align-self:flex-start}
+  .bubble.us{background:#fff;color:var(--ink);align-self:flex-end;border:1.5px solid var(--ink)}
+  .bubble .time{display:block;font-family:var(--mono);font-size:11px;opacity:.55;margin-top:8px}
+  .imagine .punch{
+    margin-top:48px;font-family:var(--display);font-size:clamp(20px,3vw,30px);
+    text-transform:uppercase;max-width:640px;line-height:1.2;
+  }
+
+  /* who */
+  .who{display:flex;flex-wrap:wrap;gap:14px;margin-top:48px}
+  .who span{
+    font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+    border:1px solid var(--line);padding:14px 22px;color:var(--frost-dim);
+    transition:all .2s ease;
+  }
+  .who span:hover{border-color:var(--ice);color:var(--ice);background:var(--ice-dim)}
+
+  /* why */
+  .why-quote{
+    margin-top:56px;border-left:3px solid var(--ice);padding:10px 0 10px 34px;
+    font-size:clamp(20px,2.8vw,28px);font-weight:600;line-height:1.4;max-width:760px;
+  }
+  .why-quote em{color:var(--ice);font-style:normal}
+
+  /* final CTA */
+  .final{
+    text-align:center;padding:130px 0;border-top:1px solid var(--line);position:relative;overflow:hidden;
+  }
+  .final::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(600px 300px at 50% 100%, rgba(94,234,255,.12), transparent 70%);
+  }
+  .final h2{max-width:none;margin:0 auto 22px}
+  .final p{color:var(--frost-dim);max-width:520px;margin:0 auto 44px}
+  .pulse{position:relative}
+  .pulse::after{
+    content:"";position:absolute;inset:-6px;border:1px solid var(--ice);
+    animation:pulse 2.2s ease-out infinite;pointer-events:none;
+  }
+  @keyframes pulse{
+    0%{opacity:.8;transform:scale(1)}
+    100%{opacity:0;transform:scale(1.12)}
+  }
+
+  footer{
+    border-top:1px solid var(--line);padding:34px 0;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;
+    font-family:var(--mono);font-size:12px;color:var(--frost-dim);letter-spacing:.08em;
+  }
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr 1fr}
+    .card.wide{grid-column:span 2;grid-template-columns:44px 1fr;}
+    .card.wide p{grid-column:span 2}
+    .pain{grid-template-columns:1fr}
+    .hero-mark{display:none}
+  }
+  @media(max-width:560px){
+    .grid{grid-template-columns:1fr}
+    .card.wide{grid-column:span 1;grid-template-columns:44px 1fr}
+    section{padding:70px 0}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">COOL<b>FLOW</b> // AI SYSTEMS</div>
+    <a class="cta-mini" href="#book">Book a Call</a>
+  </nav>
+</div>
+
+<header>
+  <div class="hero-mark">24/7</div>
+  <div class="wrap">
+    <span class="tag">AI Automation for Air Conditioning &amp; HVAC Companies</span>
+    <h1>Stop losing jobs<br>to <span class="hot">faster</span><br><span class="cool">competitors.</span></h1>
+    <p class="sub">Every missed call, delayed WhatsApp reply, or forgotten follow-up is a job that goes to another company. We build AI systems that capture every enquiry, respond in seconds, and book the job — even at 2 AM.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#book">Book Your Free Strategy Call</a>
+      <a class="btn btn-ghost" href="#solutions">See How It Works</a>
+    </div>
+  </div>
+</header>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Respond in seconds</span><span>Never miss a lead</span><span>Book jobs after hours</span><span>Automatic follow-ups</span><span>Less admin, more jobs</span><span>Respond in seconds</span><span>Never miss a lead</span><span>Book jobs after hours</span><span>Automatic follow-ups</span><span>Less admin, more jobs</span>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <span class="kicker reveal">The Problem</span>
+    <h2 class="reveal">Your customers don't wait. They call the next company.</h2>
+    <div class="pain reveal">
+      <div><b>78%</b><p>of customers buy from the business that responds first. Speed wins the job before price does.</p></div>
+      <div><b>50%+</b><p>of enquiries to service businesses arrive outside office hours — nights, weekends, public holidays.</p></div>
+      <div><b>0</b><p>follow-ups is what most missed enquiries receive. That lead is gone, and your competitor booked it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker reveal">What You Get</span>
+    <h2 class="reveal">What we help you achieve</h2>
+    <div class="achieve reveal">
+      <div class="achieve-row"><span class="num">01</span><span class="txt">Respond to every enquiry in seconds</span></div>
+      <div class="achieve-row"><span class="num">02</span><span class="txt">Never miss a lead — even after business hours</span></div>
+      <div class="achieve-row"><span class="num">03</span><span class="txt">Automatically follow up with every prospect</span></div>
+      <div class="achieve-row"><span class="num">04</span><span class="txt">Book appointments faster, without back-and-forth</span></div>
+      <div class="achieve-row"><span class="num">05</span><span class="txt">Reduce manual admin work for your team</span></div>
+      <div class="achieve-row"><span class="num">06</span><span class="txt">Deliver a better customer experience, every time</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="solutions" style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker reveal">Our Solutions</span>
+    <h2 class="reveal">A complete system. Not another app.</h2>
+    <div class="grid">
+      <div class="card reveal" data-i="/01">
+        <div class="icon">☏</div>
+        <h3>AI Receptionist</h3>
+        <p>Answers customer enquiries 24/7 across phone, WhatsApp, and your website — instantly, politely, every time.</p>
+      </div>
+      <div class="card reveal" data-i="/02">
+        <div class="icon">↩</div>
+        <h3>Missed Call Text Back</h3>
+        <p>Miss a call? Your customer immediately receives a personalised message instead of dialling your competitor.</p>
+      </div>
+      <div class="card reveal" data-i="/03">
+        <div class="icon">✆</div>
+        <h3>WhatsApp Automation</h3>
+        <p>Instantly reply to enquiries, qualify customers, answer common questions, and schedule appointments.</p>
+      </div>
+      <div class="card reveal" data-i="/04">
+        <div class="icon">◎</div>
+        <h3>Lead Qualification</h3>
+        <p>Automatically identify high-quality enquiries and route them straight to your sales team, ready to close.</p>
+      </div>
+      <div class="card reveal" data-i="/05">
+        <div class="icon">▦</div>
+        <h3>Appointment Booking</h3>
+        <p>Customers book available time slots themselves — no waiting for office hours, no phone tag.</p>
+      </div>
+      <div class="card reveal" data-i="/06">
+        <div class="icon">⟳</div>
+        <h3>Smart Follow-Ups</h3>
+        <p>Prospects who go quiet get automatic, well-timed reminders — quietly lifting your conversion rate.</p>
+      </div>
+      <div class="card wide reveal" data-i="/07">
+        <div class="icon">⚙</div>
+        <h3>CRM &amp; Workflow Automation</h3>
+        <p>Every enquiry organised in one place. Repetitive tasks automated. Your team focuses on serving customers — not chasing spreadsheets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="imagine">
+  <div class="wrap">
+    <span class="kicker reveal">Imagine If…</span>
+    <h2 class="reveal">A customer messages you at 11:30 PM.</h2>
+    <div class="chat reveal">
+      <div class="bubble them">Hi, my aircon just died and it's boiling in here. Can someone come tomorrow??<span class="time">11:31 PM</span></div>
+      <div class="bubble us">So sorry to hear that! Yes — we have a technician slot open tomorrow at 9:30 AM or 2:00 PM. Which works better for you?<span class="time">11:31 PM · Answered by AI</span></div>
+      <div class="bubble them">9:30 please 🙏<span class="time">11:32 PM</span></div>
+      <div class="bubble us">Done ✓ You're booked for 9:30 AM. Confirmation sent to your WhatsApp. Sleep well — cool air is on the way.<span class="time">11:32 PM · Booked automatically</span></div>
+    </div>
+    <p class="punch reveal">No waiting until morning. No lost customer. That's the power of AI automation.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="kicker reveal">Who We Work With</span>
+    <h2 class="reveal">Built for the aircon &amp; HVAC industry</h2>
+    <div class="who reveal">
+      <span>Residential Air Conditioning</span>
+      <span>Commercial HVAC Contractors</span>
+      <span>Aircon Installation Companies</span>
+      <span>Aircon Maintenance &amp; Servicing</span>
+      <span>Mechanical &amp; ACMV Contractors</span>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker reveal">Why Choose Us</span>
+    <p class="why-quote reveal">We don't sell software. We build <em>complete automation systems</em> designed around your existing process — so your team saves time, responds faster, and converts more enquiries into paying customers.</p>
+  </div>
+</section>
+
+<section class="final" id="book">
+  <div class="wrap">
+    <span class="kicker reveal">Ready?</span>
+    <h2 class="reveal">Stop losing leads. Starting this week.</h2>
+    <p class="reveal">Let's identify exactly where customers are slipping through the cracks — and show you how AI can respond faster, book more jobs, and grow your business without hiring more staff.</p>
+    <a class="btn btn-primary pulse reveal" href="#">Book Your Free AI Automation Strategy Call</a>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>COOLFLOW // AI SYSTEMS</span>
+    <span>AI AUTOMATION FOR HVAC — EST. 2026</span>
+  </footer>
+</div>
+
+<script>
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
